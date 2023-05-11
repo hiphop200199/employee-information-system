@@ -48,11 +48,7 @@ $rows = $conn->query($sql)->fetchAll();
             <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工編號</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工照片</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工名稱</th>
-              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工生日</th>
-              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工年齡</th>
-              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工性別</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工電話</th>
-              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工地址</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工到職日</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工在職狀態</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工電子郵件</th>
@@ -66,11 +62,7 @@ $rows = $conn->query($sql)->fetchAll();
           <td class="p-2"><?=$r["employee_id"]?></td>
       <td class="p-2"><?=$r["employee_photo"] ?></td>
       <td class="p-2"><?=$r["employee_name"]?></td>
-      <td class="p-2"><?=$r["employee_birthday"]?></td>
-      <td class="p-2"><?=$r["employee_age"]?></td>
-      <td class="p-2"><?=$r["employee_gender"]?></td>
       <td class="p-2"><?=$r["employee_phone"]?></td>
-      <td class="p-2"><?=$r["employee_address"]?></td>
       <td class="p-2"><?=$r["employee_onboard_date"]?></td>
       <td class="p-2"><?php if($r["employee_still_onboard"]===1) {echo '仍在職';}else{echo '已離職';} ?></td>
       <td class="p-2"><?=$r["employee_email"]?></td>

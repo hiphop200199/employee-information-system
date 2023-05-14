@@ -28,7 +28,11 @@ if(isset($_POST["create"])){
         $sql="INSERT INTO basic_data(employee_name,employee_phone,employee_onboard_date,employee_still_onboard,employee_email) VALUES(?,?,?,?,?) ";
         $statement = $conn->prepare($sql);
         $statement->execute([$name,$phone,$onboard_date,$status,$email]);
-        
+        $sql_get_employee_id = "SELECT employee_id FROM basic_data ORDER BY employee_id DESC LIMIT 1;";
+        $search_id_result = $conn->query($sql_get_employee_id)->fetch();
+        $sql_create_work = "INSERT INTO work_experience(employee_id) VALUES(?)";
+        $statement_create_work = $conn->prepare($sql_create_work);
+        $statement_create_work->execute([$search_id_result['employee_id']]);
     }
 }
 ?>

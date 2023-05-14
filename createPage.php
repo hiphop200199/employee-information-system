@@ -12,7 +12,7 @@ session_start();
             <a href="logout.php" class="text-xl text-cyan-900 no-underline  m-2">登出</a>
           </nav>
       
-        <h1 class=" text-6xl text-cyan-900 self-center">Hi <?php echo $_SESSION["nickname"];?></h1>
+        <h1 class=" text-6xl text-cyan-900 self-center">新增資料</h1>
       </header>
       <main class="h-4/6 flex justify-center items-center">
        

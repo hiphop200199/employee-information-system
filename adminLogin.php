@@ -1,7 +1,7 @@
 <?php 
 session_start();
 if(isset($_SESSION["admin_account"]) && isset($_SESSION["admin_password"])){
- include("read.php") ;
+ include("db.php") ;
  $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
  if($page<1){
   header("Location:?page=1");
@@ -26,16 +26,16 @@ $rows = $conn->query($sql)->fetchAll();
       <header class="h-1/6 bg-cyan-100 flex flex-col p-2">
         <nav class="self-end">
         <a href="createPage.php" class="text-xl text-cyan-900 no-underline  m-2">新增資料</a>
-        <form id="sort-form" action="adminLogin.php" method="get" class="inline">
+        <!--<form id="sort-form" action="adminLogin.php" method="get" class="inline">
         <select id="sort-btn"  class="text-xl bg-cyan-100 m-2 outline-0" onchange="sortData()">
             <option name="sort">依名稱排序</option>
             <option name="sort">依薪水排序</option>
             <option name="sort">依年齡排序</option>
           </select>
-        </form>
+        </form>-->
          
-          <button class="text-xl text-cyan-900 m-2" id="search-btn" onclick="openModal('s')">查詢方式</button>
-          <button class="text-xl text-cyan-900 m-2">夜間模式</button>
+          <!--<button class="text-xl text-cyan-900 m-2" id="search-btn" onclick="openModal('s')">查詢方式</button>
+          <button class="text-xl text-cyan-900 m-2">夜間模式</button>-->
             <a href="logout.php" class="text-xl text-cyan-900 no-underline  m-2">登出</a>
           </nav>
       
@@ -46,7 +46,7 @@ $rows = $conn->query($sql)->fetchAll();
           <thead>
             <tr>
             <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工編號</th>
-              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工照片</th>
+              <!--<th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工照片</th>-->
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工名稱</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工電話</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工到職日</th>
@@ -60,7 +60,7 @@ $rows = $conn->query($sql)->fetchAll();
           <?php foreach ($rows as $r) : ?>
           <tr>
           <td class="p-2"><?=$r["employee_id"]?></td>
-      <td class="p-2"><?=$r["employee_photo"] ?></td>
+      <!--<td class="p-2"><?=$r["employee_photo"] ?></td>-->
       <td class="p-2"><?=$r["employee_name"]?></td>
       <td class="p-2"><?=$r["employee_phone"]?></td>
       <td class="p-2"><?=$r["employee_onboard_date"]?></td>
@@ -79,7 +79,15 @@ $rows = $conn->query($sql)->fetchAll();
     </div>
     <dialog id="search-modal" class="releative w-1/3 h-2/3 shadow-md shadow-cyan-700">
       <button class="absolute text-xl text-cyan-900 right-2 top-1" onclick="closeModal()">關閉</button>
-    
+      <button>所有員工基本資料</button>
+      <input type="text" name="" id="" list="">
+      <datalist id="employees">
+        <?php  foreach ($rows as $r):  ?>
+        <option value="<?php $r['employee_name'] ?>"></option>
+       <?php endforeach ?>
+      </datalist>
+      <button>個別員工工作經驗</button>
+
     </dialog>
    
     <script>

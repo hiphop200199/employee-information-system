@@ -14,8 +14,9 @@ $sql_work="UPDATE `work_experience` SET
 `job_title`=?,
 `salary`=?,
 `reason_for_leaving`,
-WHERE `employee_id`=?";
+WHERE `work_exp_id`=?";
 $employee_id = intval($_POST["employee_id"]);
+$work_exp_id = intval($_POST['work_exp_id']);
  $name=$_POST["name"];
  $phone=$_POST["phone"];
  $onboard_date=$_POST["onboard_date"];
@@ -29,7 +30,19 @@ $employee_id = intval($_POST["employee_id"]);
  $reason_for_leaving = $_POST['reason_for_leaving'];
 
 $statement_basic = $conn->prepare($sql_basic);
-$statement_basic->execute([
+$statement_work = $conn->prepare($sql_work);
+if(isset($_POST['work_exp_id'])){
+  $statement_work->execute([
+    $company_name,
+    $start_from ,
+    $ended_at, 
+    $job_title, 
+    $salary, 
+    $reason_for_leaving,
+   $work_exp_id
+  ]);
+}else{
+  $statement_basic->execute([
     $name,
     $phone,
     $onboard_date,
@@ -37,16 +50,10 @@ $statement_basic->execute([
     $email,
     $employee_id
   ]);
-  $statement_work = $conn->prepare($sql_work);
-$statement_work->execute([
-    $company_name,
-    $start_from ,
-    $ended_at, 
-    $job_title, 
-    $salary, 
-    $reason_for_leaving,
-    $employee_id 
-  ]);
+}
+
+ 
+
   ?>
   <?php include("./parts/head.php"); ?>
   <body class="p-0 m-0 box-border">

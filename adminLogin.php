@@ -26,6 +26,7 @@ $rows = $conn->query($sql)->fetchAll();
       <header class="h-1/6 bg-cyan-100 flex flex-col p-2">
         <nav class="self-end">
         <a href="createPage.php" class="text-xl text-cyan-900 no-underline  m-2">新增資料</a>
+        <button id="update-btn" class="text-xl text-cyan-900 m-2">資料修改</button>
         <!--<form id="sort-form" action="adminLogin.php" method="get" class="inline">
         <select id="sort-btn"  class="text-xl bg-cyan-100 m-2 outline-0" onchange="sortData()">
             <option name="sort">依名稱排序</option>
@@ -53,7 +54,7 @@ $rows = $conn->query($sql)->fetchAll();
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工在職狀態</th>
               <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工電子郵件</th>
              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">刪除資料</th>
-             <th class="text-cyan-900 p-2 text-lg bg-cyan-50">修改資料</th>
+             <!--<th class="text-cyan-900 p-2 text-lg bg-cyan-50">修改資料</th>-->
             </tr>
           </thead>
         <tbody>
@@ -67,7 +68,7 @@ $rows = $conn->query($sql)->fetchAll();
       <td class="p-2"><?php if($r["employee_still_onboard"]===1) {echo '仍在職';}else{echo '已離職';} ?></td>
       <td class="p-2"><?=$r["employee_email"]?></td>
       <td class="p-2 text-center"><a href="delete.php?employee_id=<?= $r['employee_id'] ?>" onclick="return confirm('確定要刪除該筆資料嗎?')">🗑️</a></td>
-      <td class="p-2 text-center"><a href="editPage.php?employee_id=<?= $r['employee_id']?>">&#x270E;</a></td>
+      <!--<td class="p-2 text-center"><a href="editPage.php?employee_id=<?= $r['employee_id']?>">&#x270E;</a></td>-->
       
       
           </tr>
@@ -77,7 +78,7 @@ $rows = $conn->query($sql)->fetchAll();
       </main>
       <footer class="h-1/6 bg-cyan-100"></footer>
     </div>
-    <dialog id="search-modal" class="releative w-1/3 h-2/3 shadow-md shadow-cyan-700">
+    <!--<dialog id="search-modal" class="releative w-1/3 h-2/3 shadow-md shadow-cyan-700">
       <button class="absolute text-xl text-cyan-900 right-2 top-1" onclick="closeModal()">關閉</button>
       <button>所有員工基本資料</button>
       <input type="text" name="" id="" list="">
@@ -88,22 +89,42 @@ $rows = $conn->query($sql)->fetchAll();
       </datalist>
       <button>個別員工工作經驗</button>
 
-    </dialog>
-   
+    </dialog>-->
+          <dialog id="update-modal" class="releative w-1/3 h-1/3 shadow-md shadow-cyan-700">
+              <h2 class="text-3xl text-cyan-900 text-center my-2">請輸入資料類型、員工編號</h2>
+              <form action="linkToEditPage.php" method="get" class="flex justify-center items-center flex-col">
+                <section>
+              <label class="text-lg m-2">基本資料<input type="radio" value="basic" name="update-type" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-2"/></label>
+              <label class="text-lg m-2">工作經驗<input type="radio" value="work-exp" name="update-type" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-2"/></label>
+              </section>
+             
+              <label class="text-lg m-2">員工編號:<input type="number" min="1" name="emp-id" required class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-2"/></label>
+             
+              <section class="flex justify-center my-2">
+              <button type="submit" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2">提交</button>
+              <button type="button" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2" id="cancel-update">取消</button>
+              </section>
+              </form>
+          </dialog>
     <script>
-      let searchDialog = document.getElementById("search-modal");
+      //let searchDialog = document.getElementById("search-modal");
+      let updateDialog =document.getElementById("update-modal");
+      let updateButton =document.getElementById("update-btn");
+      let cancelUpdate =document.getElementById("cancel-update");
       let sortButton = document.getElementById("sort-btn");
       let sortForm = document.getElementById("sort-form");
       function openModal(){
-            searchDialog.showModal();
+            updateDialog.showModal();
       }
      function closeModal(){
-            searchDialog.close();
+            updateDialog.close();
      } 
      function sortData(){
       let option =sortButton.value;
       sortForm.submit();
      }
+     updateButton.addEventListener("click",openModal);
+     cancelUpdate.addEventListener("click",closeModal);
     </script>
   </body>
 </html>

@@ -1,0 +1,1 @@
+<label class="text-xl text-cyan-900 m-2">工作經驗筆數:<input type="number" min="0" id="work-exp-amount" class="p-2 m-2"/></label>

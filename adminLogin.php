@@ -25,8 +25,8 @@ $rows = $conn->query($sql)->fetchAll();
     <div class="w-full h-screen">
       <header class="h-1/6 bg-cyan-100 flex flex-col p-2">
         <nav class="self-end">
-        <a href="createPage.php" class="text-xl text-cyan-900 no-underline  m-2">新增資料</a>
-        <button id="update-btn" class="text-xl text-cyan-900 m-2">資料修改</button>
+        <button id="create-btn" class="text-xl text-cyan-900 m-2" onclick="openModal('c')">新增資料</button>
+        <button id="update-btn" class="text-xl text-cyan-900 m-2" onclick="openModal('u')">資料修改</button>
         <!--<form id="sort-form" action="adminLogin.php" method="get" class="inline">
         <select id="sort-btn"  class="text-xl bg-cyan-100 m-2 outline-0" onchange="sortData()">
             <option name="sort">依名稱排序</option>
@@ -90,6 +90,23 @@ $rows = $conn->query($sql)->fetchAll();
       <button>個別員工工作經驗</button>
 
     </dialog>-->
+    <dialog id="create-modal" class="releative w-1/3 h-1/3 shadow-md shadow-cyan-700">
+              <h2 class="text-3xl text-cyan-900 text-center my-2">請輸入資料類型、員工編號</h2>
+              <h3 class="text-2xl text-cyan-900 text-center my-2">新增工作經驗需要基本資料</h3>
+              <form action="linkToCreatePage.php" method="get" class="flex justify-center items-center flex-col">
+                <section>
+              <label class="text-lg m-2">基本資料<input type="radio" value="basic" name="create-type" id="basic-radio" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-2"/></label>
+              <label class="text-lg m-2">工作經驗<input type="radio" value="work-exp" name="create-type" id="work-exp-radio" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-2"/></label>
+              </section>
+             
+              <label class="text-lg m-2">員工編號:<input type="number" min="1" name="emp-id" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-2" id="emp-id-input"/></label>
+             
+              <section class="flex justify-center my-2">
+              <button type="submit" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2">提交</button>
+              <button type="button" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2" id="cancel-create" onclick="closeModal('c')">取消</button>
+              </section>
+              </form>
+          </dialog>
           <dialog id="update-modal" class="releative w-1/3 h-1/3 shadow-md shadow-cyan-700">
               <h2 class="text-3xl text-cyan-900 text-center my-2">請輸入資料類型、員工編號</h2>
               <form action="linkToEditPage.php" method="get" class="flex justify-center items-center flex-col">
@@ -102,29 +119,49 @@ $rows = $conn->query($sql)->fetchAll();
              
               <section class="flex justify-center my-2">
               <button type="submit" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2">提交</button>
-              <button type="button" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2" id="cancel-update">取消</button>
+              <button type="button" class="text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900 m-2" id="cancel-update" onclick="closeModal('u')">取消</button>
               </section>
               </form>
           </dialog>
     <script>
       //let searchDialog = document.getElementById("search-modal");
+      let createDialog =document.getElementById("create-modal");
+      let createButton = document.getElementById("create-btn");
+      let cancelCreate = document.getElementById("cancel-create");
       let updateDialog =document.getElementById("update-modal");
       let updateButton =document.getElementById("update-btn");
       let cancelUpdate =document.getElementById("cancel-update");
       let sortButton = document.getElementById("sort-btn");
       let sortForm = document.getElementById("sort-form");
-      function openModal(){
+      let basicOption = document.getElementById("basic-radio");
+      let workExpOption =document.getElementById("work-exp-radio");
+      let empIdInput =document.getElementById("emp-id-input");
+      function openModal(type){
+        switch(type){
+          case 'c':
+            createDialog.showModal();
+            break;
+          case 'u':
             updateDialog.showModal();
+            break;  
+        }
       }
-     function closeModal(){
+     function closeModal(type){
+      switch(type){
+          case 'c':
+            createDialog.close();
+            break;
+          case 'u':
             updateDialog.close();
+            break;  
+        }
      } 
      function sortData(){
       let option =sortButton.value;
       sortForm.submit();
      }
-     updateButton.addEventListener("click",openModal);
-     cancelUpdate.addEventListener("click",closeModal);
+     workExpOption.addEventListener("input",()=>empIdInput.setAttribute("required",'true'))
+     basicOption.addEventListener("input",()=>empIdInput.removeAttribute("required"));
     </script>
   </body>
 </html>

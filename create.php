@@ -12,19 +12,9 @@ if(isset($_POST["create"])){
     $onboard_date = validate($_POST["onboard-date"]);
     $status = validate($_POST["status"]);
     $email = validate($_POST["email"]);
-    $basic_data = "name=" . $name . "&phone=" . $phone . "&onboard_date=" . $onboard_date."&status=".$status."&email=".$email;
 
-    if(empty($name)){
-        header("Location:./createPage.php?error=Name is required&$basic_data");
-    }elseif(empty($phone)){
-        header("Location:./createPage.php?error=Phone is required&$basic_data");
-    }elseif(empty($onboard_date)){
-        header("Location:./createPage.php?error=Onboard_date is required&$basic_data");
-    } elseif (empty($status)) {
-        header("Location:./createPage.php?error=Status is required&$basic_data");
-    }elseif(empty($email)){
-        header("Location:./createPage.php?error=Email is required&$basic_data");
-    }else{
+
+   
         $sql="INSERT INTO basic_data(employee_name,employee_phone,employee_onboard_date,employee_still_onboard,employee_email) VALUES(?,?,?,?,?) ";
         $statement = $conn->prepare($sql);
         $statement->execute([$name,$phone,$onboard_date,$status,$email]);
@@ -33,7 +23,7 @@ if(isset($_POST["create"])){
         $sql_create_work = "INSERT INTO work_experience(employee_id) VALUES(?)";
         $statement_create_work = $conn->prepare($sql_create_work);
         $statement_create_work->execute([$search_id_result['employee_id']]);
-    }
+  
 }
 ?>
  <?php include("./parts/head.php"); ?>

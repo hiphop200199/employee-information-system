@@ -32,13 +32,22 @@ $work_exp_amount;
    <script>
     let workArea =document.getElementById("work-experience-area");
     let workAmount = document.getElementById("work-exp-amount");
+    let workExpForm =document.getElementById("work-exp-form");
+    if(workExpForm!==null){
+      workExpForm.addEventListener("submit",function(e){
+        e.preventDefault();
+      })
+    }
     if(workAmount!==null){
 
       workAmount.addEventListener("input",function(e){
       let button = '<button type="submit" class="block text-xl rounded-sm border-2 border-gray-300 bg-cyan-100 p-2 text-cyan-900" > 新增 </button>';
       let content='';
       let amount = parseInt(e.target.value);
-      let data = `<div  class="flex  p-3 m-5">
+      let dataId = 1;
+    
+      for(let i=0;i<amount;i++){
+        let data = `<div id="work-experience-data-${dataId}" class="flex  p-3 m-5">
                               <label class="text-lg m-1">公司名稱:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="company_name" type="text"  value=""></label>
                               <label class="text-lg m-1">起始日期:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="start_from" type="date"  value=""></label>
                               <label class="text-lg m-1">結束日期:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="ended_at" type="date"  value=""></label>
@@ -46,8 +55,8 @@ $work_exp_amount;
                               <label class="text-lg m-1">工作薪水:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="salary" type="number" min="0"  value=""></label>
                               <label class="text-lg m-1">離職原因:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="reason_for_leaving" type="text"  value=""></label>
                               </div>`
-      for(let i=0;i<amount;i++){
         content+=data;
+        dataId++;        
       }
       workArea.innerHTML=content+button;
     })

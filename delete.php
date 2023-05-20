@@ -3,11 +3,17 @@
 include("db.php") ;
 
 $employee_id = isset($_GET['employee_id']) ? intval($_GET['employee_id']) : 0;
+$work_exp_id = isset($_GET['work_exp_id']) ? intval($_GET['work_exp_id']) : 0;
 
 
+$sql_b = "DELETE FROM basic_data WHERE employee_id=$employee_id";
+$sql_w = "DELETE FROM work_experience WHERE work_exp_id=$work_exp_id";
+if($employee_id){
+  $conn->exec($sql_b);
+}elseif($work_exp_id){
+  $conn->exec($sql_w);
+}
 
-$sql = "DELETE FROM basic_data WHERE employee_id=$employee_id";
-$conn->exec($sql);
 $conn = null;
 
 ?>

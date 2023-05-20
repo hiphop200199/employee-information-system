@@ -30,14 +30,42 @@ $work_exp_amount;
     </div>
    
    <script>
-    let workArea =document.getElementById("work-experience-area");
+   
     let workAmount = document.getElementById("work-exp-amount");
     let workExpForm =document.getElementById("work-exp-form");
     if(workExpForm!==null){
       workExpForm.addEventListener("submit",function(e){
         e.preventDefault();
+        let dataArray=[];
+        let allData =document.querySelectorAll("[id^=work-experience-data-]");
+        let param = new URLSearchParams(window.location.search);
+        let employeeId =param.get('emp-id');
+        for(let i=0;i<allData.length;i++){
+          let inputs =allData[i].querySelectorAll("input")
+          const data = [
+            employeeId,
+           inputs[0].value,
+           inputs[1].value,
+            inputs[2].value,
+           inputs[3].value,
+            inputs[4].value,
+            inputs[5].value,
+          ]
+          dataArray.push(data);
+        }
+        fetch('createWorkExperience.php',{
+          method:'POST',
+          mode:'same-origin',
+          credentials:'same-origin',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({dataArray})
+        }).then((res)=>{  
+        console.log(res.text());
+        location.href='create.php';
+      }).catch(err=>console.log(err))
       })
     }
+ 
     if(workAmount!==null){
 
       workAmount.addEventListener("input",function(e){
@@ -45,22 +73,21 @@ $work_exp_amount;
       let content='';
       let amount = parseInt(e.target.value);
       let dataId = 1;
-    
       for(let i=0;i<amount;i++){
         let data = `<div id="work-experience-data-${dataId}" class="flex  p-3 m-5">
-                              <label class="text-lg m-1">公司名稱:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="company_name" type="text"  value=""></label>
-                              <label class="text-lg m-1">起始日期:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="start_from" type="date"  value=""></label>
-                              <label class="text-lg m-1">結束日期:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="ended_at" type="date"  value=""></label>
-                              <label class="text-lg m-1">工作職稱:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="job_title" type="text"  value=""></label>
-                              <label class="text-lg m-1">工作薪水:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="salary" type="number" min="0"  value=""></label>
-                              <label class="text-lg m-1">離職原因:<input id="name" class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1" name="reason_for_leaving" type="text"  value=""></label>
+                              <label class="text-lg m-1">公司名稱:<input  class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1"  type="text"  ></label>
+                              <label class="text-lg m-1">起始日期:<input  class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1"  type="date" ></label>
+                              <label class="text-lg m-1">結束日期:<input  class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1"  type="date"  ></label>
+                              <label class="text-lg m-1">工作職稱:<input  class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1"  type="text"  ></label>
+                              <label class="text-lg m-1">工作薪水:<input  class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1"  type="number" min="0"  ></label>
+                              <label class="text-lg m-1">離職原因:<input  class="text-lg border-2 border-gray-300 p-2 rounded-sm outline-2 outline-cyan-900 m-1"  type="text"  ></label>
                               </div>`
         content+=data;
         dataId++;        
       }
-      workArea.innerHTML=content+button;
+      workExpForm.innerHTML=content+button;
     })
-
+   
     }
     
    </script>

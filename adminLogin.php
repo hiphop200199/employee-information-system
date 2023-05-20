@@ -160,8 +160,15 @@ $rows = $conn->query($sql)->fetchAll();
       let option =sortButton.value;
       sortForm.submit();
      }
-     workExpOption.addEventListener("input",()=>empIdInput.setAttribute("required",'true'))
-     basicOption.addEventListener("input",()=>empIdInput.removeAttribute("required"));
+     workExpOption.addEventListener("input",()=>{
+      empIdInput.removeAttribute("disabled");
+      empIdInput.setAttribute("required",'true');
+    })
+     basicOption.addEventListener("input",()=>{
+      empIdInput.removeAttribute("required");
+      empIdInput.setAttribute("disabled",'true');
+      empIdInput.value='';
+    });
     </script>
   </body>
 </html>

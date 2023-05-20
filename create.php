@@ -25,6 +25,9 @@ if(isset($_POST["create"])){
         $statement_create_work->execute([$search_id_result['employee_id']]);
   
 }
+  
+    
+  
 ?>
  <?php include("./parts/head.php"); ?>
 <body>

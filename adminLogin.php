@@ -9,15 +9,21 @@ if(isset($_SESSION["admin_account"]) && isset($_SESSION["admin_password"])){
 }
 $dataPerPage=10;
 $allData=[];
-$sql = sprintf(
+$sql_basic = sprintf(
   "SELECT * FROM basic_data ORDER BY employee_id DESC LIMIT %s, %s",
+  ($page - 1) * $dataPerPage,
+  $dataPerPage
+);
+$sql_work = sprintf(
+  "SELECT * FROM work_experience ORDER BY work_exp_id DESC LIMIT %s, %s",
   ($page - 1) * $dataPerPage,
   $dataPerPage
 );
 $totalSql="SELECT COUNT(1) FROM basic_data";
 $totalDataCount = $conn->query($totalSql)->fetch(PDO::FETCH_NUM)[0];
 $totalPages = ceil($totalDataCount / $dataPerPage);
-$rows = $conn->query($sql)->fetchAll();
+$rows = $conn->query($sql_basic)->fetchAll();
+$rows_w =$conn->query($sql_work)->fetchAll();
   include('./parts/head.php');
  ?>   
 
@@ -25,6 +31,7 @@ $rows = $conn->query($sql)->fetchAll();
     <div class="w-full h-screen">
       <header class="h-1/6 bg-cyan-100 flex flex-col p-2">
         <nav class="self-end">
+          <button id="display-mode" class="text-xl text-cyan-900 m-2">顯示工作經驗</button>
         <button id="create-btn" class="text-xl text-cyan-900 m-2" onclick="openModal('c')">新增資料</button>
         <button id="update-btn" class="text-xl text-cyan-900 m-2" onclick="openModal('u')">資料修改</button>
         <!--<form id="sort-form" action="adminLogin.php" method="get" class="inline">
@@ -43,7 +50,8 @@ $rows = $conn->query($sql)->fetchAll();
         <h1 class=" text-6xl text-cyan-900 self-center">Hi <?php echo $_SESSION["nickname"];?></h1>
       </header>
       <main class="h-4/6 flex justify-center items-center">
-        <table class="border-collapse border border border-gray-300">
+
+        <table id="basic-data-table" class="border-collapse border border border-gray-300">
           <thead>
             <tr>
             <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工編號</th>
@@ -69,6 +77,39 @@ $rows = $conn->query($sql)->fetchAll();
       <td class="p-2"><?=$r["employee_email"]?></td>
       <td class="p-2 text-center"><a href="delete.php?employee_id=<?= $r['employee_id'] ?>" onclick="return confirm('確定要刪除該筆資料嗎?')">🗑️</a></td>
       <!--<td class="p-2 text-center"><a href="editPage.php?employee_id=<?= $r['employee_id']?>">&#x270E;</a></td>-->
+      
+      
+          </tr>
+          <?php endforeach ?>
+        </tbody>
+        </table>
+        <table id="work-experience-table" class="hidden border-collapse border border border-gray-300">
+          <thead>
+            <tr>
+            <th class="text-cyan-900 p-2 text-lg bg-cyan-50">工作經驗編號</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">員工編號</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">公司名稱</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">起始日期</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">結束日期</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">職稱</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">薪水</th>
+              <th class="text-cyan-900 p-2 text-lg bg-cyan-50">離職原因</th>
+             <th class="text-cyan-900 p-2 text-lg bg-cyan-50">刪除資料</th>
+            </tr>
+          </thead>
+        <tbody>
+          <?php foreach ($rows_w as $rw) : ?>
+          <tr>
+          <td class="p-2"><?=$rw["work_exp_id"]?></td>
+      <td class="p-2"><?=$rw["employee_id"] ?></td>
+      <td class="p-2"><?=$rw["company_name"] ?></td>
+      <td class="p-2"><?=$rw["start_from"]?></td>
+      <td class="p-2"><?=$rw["ended_at"]?></td>
+      <td class="p-2"><?=$rw["job_title"]?></td>
+      <td class="p-2"><?=$rw["salary"] ?></td>
+      <td class="p-2"><?=$rw["reason_for_leaving"] ?></td>
+      <td class="p-2 text-center"><a href="delete.php?work_exp_id=<?= $rw['work_exp_id'] ?>" onclick="return confirm('確定要刪除該筆資料嗎?')">🗑️</a></td>
+     
       
       
           </tr>
@@ -136,6 +177,9 @@ $rows = $conn->query($sql)->fetchAll();
       let basicOption = document.getElementById("basic-radio");
       let workExpOption =document.getElementById("work-exp-radio");
       let empIdInput =document.getElementById("emp-id-input");
+      let basicDataTable =document.getElementById("basic-data-table");
+      let workExpTable =document.getElementById("work-experience-table");
+      let displayButton =document.getElementById("display-mode");
       function openModal(type){
         switch(type){
           case 'c':
@@ -165,10 +209,22 @@ $rows = $conn->query($sql)->fetchAll();
       empIdInput.setAttribute("required",'true');
     })
      basicOption.addEventListener("input",()=>{
-      empIdInput.removeAttribute("required");
-      empIdInput.setAttribute("disabled",'true');
-      empIdInput.value='';
+        empIdInput.removeAttribute("required");
+        empIdInput.setAttribute("disabled",'true');
+        empIdInput.value='';
     });
+    displayButton.addEventListener("click",function(){
+      if(workExpTable.classList.contains('hidden')){
+        workExpTable.classList.remove('hidden');
+        basicDataTable.classList.add('hidden');
+        this.innerText='顯示基本資料';
+      }else{
+        basicDataTable.classList.remove('hidden');
+        workExpTable.classList.add('hidden');
+        this.innerText='顯示工作經驗';
+      }
+     
+    })
     </script>
   </body>
 </html>
